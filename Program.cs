@@ -9,7 +9,7 @@ namespace Ascart
     {
         static void writecolmenu(int sel, string[] option)
         {
-            for (int i = 0; i < 2; i++) { if (i == sel) { Console.Write($"\x1b[32;2;50;250;20m{option[i]}"); } else { Console.ForegroundColor = ConsoleColor.White; Console.Write(option[i]); } }Console.SetCursorPosition(0, Console.CursorTop);
+            for (int i = 0; i < option.Length; i++) { if (i == sel) { Console.Write($"\x1b[32;2;50;250;20m{option[i]}"); } else { Console.ForegroundColor = ConsoleColor.White; Console.Write(option[i]); } }Console.SetCursorPosition(0, Console.CursorTop);
         }
         static int avgpxcol(Bitmap B, int x, int y)
         {
@@ -28,7 +28,7 @@ namespace Ascart
             bool exit = false;
             object[,] Blocks = { { ' ', '.', ',', ':', ';', '¦', '/', 'X', '#', '@', '█' }, { 10, 50, 75, 100, 125, 150, 175, 200, 225, 250, 255 } };
 
-            string[] option = { "Greyscale ", "Colour " };
+            string[] option = { "Greyscale ", "Colour (CharVar™) ", "Colour (Regular)" };
             while(!exit)
 {
                 Console.ResetColor();
@@ -117,7 +117,7 @@ namespace Ascart
                 {
                     double aspectRatio = 0.5; // 0.5 is better than 2/3 strangely, even though a character width is 2/3 its height
 
-                    if (sel == 1) // Colour option
+                    if (sel == 1 || sel == 2) // Colour option
                     {
                         for (double y = 0; y < bitmap.Height; y += (step / aspectRatio))
                         {
@@ -130,7 +130,9 @@ namespace Ascart
 
                                 Color pxColor = returnpxcol(bitmap, intX, intY);
                                 char asciiChar = choosechar(avgpxcol(bitmap, intX, intY), Blocks);
-                                Console.Write($"\x1b[38;2;{pxColor.R};{pxColor.G};{pxColor.B}m{asciiChar}");
+                                if (sel == 1)
+                                { Console.Write($"\x1b[38;2;{pxColor.R};{pxColor.G};{pxColor.B}m{asciiChar}"); }
+                                else { Console.Write($"\x1b[38;2;{pxColor.R};{pxColor.G};{pxColor.B}m█"); }
                             }
                             Console.WriteLine();
                         }
